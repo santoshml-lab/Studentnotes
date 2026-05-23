@@ -1,0 +1,279 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ExamPanic AI Notes PDF 🚀</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+background:
+radial-gradient(circle at top left,#38bdf830,transparent 25%),
+radial-gradient(circle at bottom right,#6366f130,transparent 25%),
+#020617;
+
+color:white;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+/* NAV */
+
+.nav{
+width:100%;
+padding:22px 7%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(20px);
+border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+color:#38bdf8;
+}
+
+.nav-btn{
+padding:12px 22px;
+border:none;
+border-radius:14px;
+background:linear-gradient(45deg,#38bdf8,#6366f1);
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+/* HERO */
+
+.hero{
+width:90%;
+max-width:1400px;
+margin:auto;
+margin-top:35px;
+padding:45px;
+border-radius:30px;
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(25px);
+box-shadow:0 0 40px rgba(56,189,248,0.15);
+}
+
+.hero h1{
+font-size:50px;
+line-height:1.3;
+}
+
+.hero span{
+color:#38bdf8;
+}
+
+/* MAIN */
+
+.main{
+width:90%;
+max-width:1400px;
+margin:auto;
+margin-top:30px;
+display:grid;
+grid-template-columns:380px 1fr;
+gap:25px;
+}
+
+/* CARD */
+
+.card{
+background:rgba(255,255,255,0.05);
+padding:25px;
+border-radius:25px;
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(20px);
+}
+
+/* INPUT */
+
+input,select{
+width:100%;
+padding:14px;
+margin-top:14px;
+border:none;
+outline:none;
+border-radius:16px;
+background:#111827;
+color:white;
+}
+
+/* BUTTON */
+
+.btn{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:16px;
+background:linear-gradient(45deg,#38bdf8,#6366f1);
+color:white;
+font-weight:700;
+cursor:pointer;
+transition:0.3s;
+}
+
+.btn:hover{
+transform:scale(1.02);
+}
+
+/* OUTPUT */
+
+.output{
+background:#0f172a;
+padding:25px;
+border-radius:22px;
+min-height:600px;
+margin-top:15px;
+border:1px solid rgba(255,255,255,0.06);
+line-height:1.8;
+}
+
+.output h1,h2,h3{
+color:#38bdf8;
+margin-top:15px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="nav">
+
+<div class="logo">📚 ExamPanic AI Notes</div>
+
+<button class="nav-btn">PDF Mode</button>
+
+</div>
+
+<div class="hero">
+
+<h1>
+Generate <span>Class Wise AI Notes</span> 🚀
+</h1>
+
+</div>
+
+<div class="main">
+
+<div class="card">
+
+<select id="cls">
+<option value="">Class</option>
+<option>1</option><option>2</option><option>3</option>
+<option>4</option><option>5</option><option>6</option>
+<option>7</option><option>8</option><option>9</option>
+<option>10</option>
+</select>
+
+<input id="subject" placeholder="Subject">
+<input id="chapter" placeholder="Chapter">
+
+<button class="btn" onclick="generateNotes()">Generate Notes</button>
+
+<button class="btn" onclick="downloadPDF()">Download PDF</button>
+
+</div>
+
+<div class="card">
+
+<h2>📖 Notes Output</h2>
+
+<div id="notesBox" class="output">
+Your notes will appear here...
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const API = "https://student-learning-system-r6bi.onrender.com";
+
+let lastNotes = "";
+
+/* GENERATE */
+
+async function generateNotes(){
+
+let cls = document.getElementById("cls").value;
+let subject = document.getElementById("subject").value;
+let chapter = document.getElementById("chapter").value;
+
+if(!cls || !subject || !chapter){
+alert("Fill all fields");
+return;
+}
+
+let res = await fetch(API+"/generate-notes",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+student_class:cls,
+subject:subject,
+chapter:chapter
+})
+});
+
+let data = await res.json();
+
+lastNotes = data.notes || "";
+
+document.getElementById("notesBox").innerHTML =
+marked.parse(lastNotes);
+
+}
+
+/* PDF DOWNLOAD */
+
+function downloadPDF(){
+
+if(!lastNotes){
+alert("No notes to download!");
+return;
+}
+
+const { jsPDF } = window.jspdf;
+let doc = new jsPDF();
+
+let cleanText = lastNotes.replace(/[#*_`]/g,"");
+
+let lines = doc.splitTextToSize(cleanText, 180);
+
+doc.text(lines, 10, 10);
+
+doc.save("ExamPanic_Notes.pdf");
+
+}
+
+</script>
+
+</body>
+</html>
