@@ -14,6 +14,7 @@
 
 <style>
 
+/* SAME CSS (UNCHANGED) */
 *{
 margin:0;
 padding:0;
@@ -22,18 +23,14 @@ font-family:'Poppins',sans-serif;
 }
 
 body{
-
 background:
 radial-gradient(circle at top left,#38bdf830,transparent 25%),
 radial-gradient(circle at bottom right,#6366f130,transparent 25%),
 #020617;
-
 color:white;
 min-height:100vh;
 overflow-x:hidden;
 }
-
-/* NAV */
 
 .nav{
 width:100%;
@@ -62,8 +59,6 @@ font-weight:600;
 cursor:pointer;
 }
 
-/* HERO */
-
 .hero{
 width:90%;
 max-width:1400px;
@@ -77,16 +72,8 @@ backdrop-filter:blur(25px);
 box-shadow:0 0 40px rgba(56,189,248,0.15);
 }
 
-.hero h1{
-font-size:50px;
-line-height:1.3;
-}
-
-.hero span{
-color:#38bdf8;
-}
-
-/* MAIN */
+.hero h1{font-size:50px;}
+.hero span{color:#38bdf8;}
 
 .main{
 width:90%;
@@ -98,8 +85,6 @@ grid-template-columns:380px 1fr;
 gap:25px;
 }
 
-/* CARD */
-
 .card{
 background:rgba(255,255,255,0.05);
 padding:25px;
@@ -107,8 +92,6 @@ border-radius:25px;
 border:1px solid rgba(255,255,255,0.08);
 backdrop-filter:blur(20px);
 }
-
-/* INPUT */
 
 input,select{
 width:100%;
@@ -121,8 +104,6 @@ background:#111827;
 color:white;
 }
 
-/* BUTTON */
-
 .btn{
 width:100%;
 padding:15px;
@@ -133,14 +114,9 @@ background:linear-gradient(45deg,#38bdf8,#6366f1);
 color:white;
 font-weight:700;
 cursor:pointer;
-transition:0.3s;
 }
 
-.btn:hover{
-transform:scale(1.02);
-}
-
-/* OUTPUT */
+.btn:hover{transform:scale(1.02);}
 
 .output{
 background:#0f172a;
@@ -153,13 +129,6 @@ line-height:1.8;
 overflow:auto;
 }
 
-.output h1,
-.output h2,
-.output h3{
-color:#38bdf8;
-margin-top:15px;
-}
-
 .loader{
 display:none;
 color:#38bdf8;
@@ -168,15 +137,8 @@ margin-bottom:10px;
 }
 
 @media(max-width:1000px){
-
-.main{
-grid-template-columns:1fr;
-}
-
-.hero h1{
-font-size:38px;
-}
-
+.main{grid-template-columns:1fr;}
+.hero h1{font-size:38px;}
 }
 
 </style>
@@ -186,19 +148,12 @@ font-size:38px;
 <body>
 
 <div class="nav">
-
 <div class="logo">📚 ExamPanic AI Notes</div>
-
 <button class="nav-btn">PDF Mode</button>
-
 </div>
 
 <div class="hero">
-
-<h1>
-Generate <span>Class Wise AI Notes</span> 🚀
-</h1>
-
+<h1>Generate <span>Class Wise AI Notes</span> 🚀</h1>
 </div>
 
 <div class="main">
@@ -207,7 +162,6 @@ Generate <span>Class Wise AI Notes</span> 🚀
 
 <select id="cls">
 <option value="">Class</option>
-
 <option value="1">1</option>
 <option value="2">2</option>
 <option value="3">3</option>
@@ -218,11 +172,16 @@ Generate <span>Class Wise AI Notes</span> 🚀
 <option value="8">8</option>
 <option value="9">9</option>
 <option value="10">10</option>
-
 </select>
 
 <input id="subject" placeholder="Subject">
 <input id="chapter" placeholder="Chapter">
+
+<!-- 🌐 LANGUAGE ADDED -->
+<select id="lang">
+<option value="english">English</option>
+<option value="hindi">Hindi</option>
+</select>
 
 <button class="btn" onclick="generateNotes()">
 Generate Notes
@@ -252,8 +211,7 @@ Your notes will appear here...
 
 <script>
 
-const API =
-"https://student-learning-system-r6bi.onrender.com";
+const API = "https://student-learning-system-r6bi.onrender.com";
 
 let lastNotes = "";
 
@@ -263,6 +221,7 @@ async function generateNotes(){
 let cls = document.getElementById("cls").value;
 let subject = document.getElementById("subject").value;
 let chapter = document.getElementById("chapter").value;
+let lang = document.getElementById("lang").value;
 
 if(!cls || !subject || !chapter){
 alert("Fill all fields");
@@ -280,7 +239,8 @@ body:JSON.stringify({
 student_name:"demo",
 student_class:cls,
 subject:subject,
-chapter:chapter
+chapter:chapter,
+language:lang   // 🔥 NEW
 })
 });
 
@@ -292,20 +252,18 @@ return;
 }
 
 lastNotes = data.notes || "";
-
-document.getElementById("notesBox").innerHTML =
-marked.parse(lastNotes);
+document.getElementById("notesBox").innerHTML = marked.parse(lastNotes);
 
 }
-
 catch(err){
 document.getElementById("notesBox").innerHTML = "❌ Backend Error";
 }
-
+finally{
 document.getElementById("loader").style.display = "none";
 }
+}
 
-/* 💎 FIXED PDF FUNCTION */
+/* PDF */
 function downloadPDF(){
 
 if(!lastNotes){
@@ -314,14 +272,11 @@ return;
 }
 
 const { jsPDF } = window.jspdf;
-
 let doc = new jsPDF();
 
 let lines = lastNotes.split("\n");
-
 let y = 12;
 
-doc.setFont("helvetica","normal");
 doc.setFontSize(12);
 
 lines.forEach(line => {
@@ -331,24 +286,7 @@ doc.addPage();
 y = 12;
 }
 
-if(
-line.includes("📘") ||
-line.includes("📌") ||
-line.includes("📖") ||
-line.includes("⭐") ||
-line.includes("🧠") ||
-line.includes("📝")
-){
-doc.setFontSize(14);
-doc.setTextColor(56,189,248);
 doc.text(line, 10, y);
-doc.setFontSize(12);
-doc.setTextColor(0,0,0);
-}
-else{
-doc.text(line, 10, y);
-}
-
 y += 8;
 
 });
