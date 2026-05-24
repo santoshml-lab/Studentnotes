@@ -150,11 +150,33 @@ min-height:600px;
 margin-top:15px;
 border:1px solid rgba(255,255,255,0.06);
 line-height:1.8;
+overflow:auto;
 }
 
-.output h1,h2,h3{
+.output h1,
+.output h2,
+.output h3{
 color:#38bdf8;
 margin-top:15px;
+}
+
+.loader{
+display:none;
+color:#38bdf8;
+font-weight:600;
+margin-bottom:10px;
+}
+
+@media(max-width:1000px){
+
+.main{
+grid-template-columns:1fr;
+}
+
+.hero h1{
+font-size:38px;
+}
+
 }
 
 </style>
@@ -185,24 +207,40 @@ Generate <span>Class Wise AI Notes</span> 🚀
 
 <select id="cls">
 <option value="">Class</option>
-<option>1</option><option>2</option><option>3</option>
-<option>4</option><option>5</option><option>6</option>
-<option>7</option><option>8</option><option>9</option>
-<option>10</option>
+
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+
 </select>
 
 <input id="subject" placeholder="Subject">
 <input id="chapter" placeholder="Chapter">
 
-<button class="btn" onclick="generateNotes()">Generate Notes</button>
+<button class="btn" onclick="generateNotes()">
+Generate Notes
+</button>
 
-<button class="btn" onclick="downloadPDF()">Download PDF</button>
+<button class="btn" onclick="downloadPDF()">
+Download PDF
+</button>
 
 </div>
 
 <div class="card">
 
 <h2>📖 Notes Output</h2>
+
+<div class="loader" id="loader">
+⚡ AI is generating notes...
+</div>
 
 <div id="notesBox" class="output">
 Your notes will appear here...
@@ -214,51 +252,87 @@ Your notes will appear here...
 
 <script>
 
-const API = "https://student-learning-system-r6bi.onrender.com";
+const API =
+"https://student-learning-system-r6bi.onrender.com";
 
 let lastNotes = "";
 
-/* GENERATE (FIXED) */
+/* GENERATE NOTES */
 
 async function generateNotes(){
 
-let cls = document.getElementById("cls").value;
-let subject = document.getElementById("subject").value;
-let chapter = document.getElementById("chapter").value;
+let cls =
+document.getElementById("cls").value;
+
+let subject =
+document.getElementById("subject").value;
+
+let chapter =
+document.getElementById("chapter").value;
 
 if(!cls || !subject || !chapter){
+
 alert("Fill all fields");
 return;
+
 }
 
+document.getElementById("loader").style.display =
+"block";
+
 document.getElementById("notesBox").innerHTML =
-"⚡ Generating notes...";
+"";
 
 try{
 
-let res = await fetch(API+"/generate-notes",{
+let res = await fetch(API + "/generate-notes",{
+
 method:"POST",
-headers:{"Content-Type":"application/json"},
+
+headers:{
+"Content-Type":"application/json"
+},
+
 body:JSON.stringify({
+
+student_name:"demo",
+
 student_class:cls,
+
 subject:subject,
+
 chapter:chapter
+
 })
+
 });
 
 let data = await res.json();
 
 console.log("API RESPONSE:", data);
 
-if(!data || !data.notes){
+if(data.status !== "success"){
+
 document.getElementById("notesBox").innerHTML =
-"❌ No notes received from backend";
+"❌ Backend Error";
+
 return;
+
 }
 
-lastNotes = data.notes;
+lastNotes = data.notes || "";
+
+if(!lastNotes){
 
 document.getElementById("notesBox").innerHTML =
+"❌ No notes received from backend";
+
+return;
+
+}
+
+document.getElementById("notesBox").innerHTML =
+
 marked.parse(lastNotes);
 
 }
@@ -272,15 +346,20 @@ document.getElementById("notesBox").innerHTML =
 
 }
 
+document.getElementById("loader").style.display =
+"none";
+
 }
 
-/* PDF DOWNLOAD (FIXED SAFE) */
+/* PDF DOWNLOAD */
 
 function downloadPDF(){
 
 if(!lastNotes){
+
 alert("No notes to download!");
 return;
+
 }
 
 const { jsPDF } = window.jspdf;
