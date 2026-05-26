@@ -5,16 +5,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ExamPanic AI Notes PDF 🚀</title>
+<title>ExamPanic AI Notes 🚀</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 
-/* SAME CSS (UNCHANGED) */
 *{
 margin:0;
 padding:0;
@@ -23,122 +23,351 @@ font-family:'Poppins',sans-serif;
 }
 
 body{
+
 background:
-radial-gradient(circle at top left,#38bdf830,transparent 25%),
-radial-gradient(circle at bottom right,#6366f130,transparent 25%),
+radial-gradient(circle at top left,#38bdf820,transparent 25%),
+radial-gradient(circle at bottom right,#8b5cf620,transparent 25%),
 #020617;
+
 color:white;
 min-height:100vh;
 overflow-x:hidden;
 }
 
+/* NAVBAR */
+
 .nav{
+
 width:100%;
-padding:22px 7%;
+padding:20px 7%;
+
 display:flex;
 justify-content:space-between;
 align-items:center;
+
 background:rgba(255,255,255,0.05);
+
 backdrop-filter:blur(20px);
+
 border-bottom:1px solid rgba(255,255,255,0.08);
+
+position:sticky;
+top:0;
+z-index:100;
 }
 
 .logo{
-font-size:28px;
+
+font-size:30px;
 font-weight:700;
+
 color:#38bdf8;
 }
 
 .nav-btn{
+
 padding:12px 22px;
+
 border:none;
 border-radius:14px;
-background:linear-gradient(45deg,#38bdf8,#6366f1);
+
+background:linear-gradient(
+45deg,
+#38bdf8,
+#8b5cf6
+);
+
 color:white;
 font-weight:600;
-cursor:pointer;
+
+box-shadow:
+0 0 25px rgba(56,189,248,0.35);
+
 }
+
+/* HERO */
 
 .hero{
+
 width:90%;
-max-width:1400px;
+max-width:1450px;
+
 margin:auto;
 margin-top:35px;
-padding:45px;
-border-radius:30px;
+
+padding:55px;
+
+border-radius:35px;
+
 background:rgba(255,255,255,0.05);
+
 border:1px solid rgba(255,255,255,0.08);
+
 backdrop-filter:blur(25px);
-box-shadow:0 0 40px rgba(56,189,248,0.15);
+
+box-shadow:
+0 0 45px rgba(56,189,248,0.15);
 }
 
-.hero h1{font-size:50px;}
-.hero span{color:#38bdf8;}
+.hero h1{
+
+font-size:58px;
+line-height:1.3;
+}
+
+.hero span{
+color:#38bdf8;
+}
+
+.hero p{
+
+margin-top:18px;
+
+font-size:18px;
+opacity:0.85;
+
+max-width:850px;
+line-height:1.8;
+}
+
+/* MAIN */
 
 .main{
+
 width:90%;
-max-width:1400px;
+max-width:1450px;
+
 margin:auto;
 margin-top:30px;
+
 display:grid;
 grid-template-columns:380px 1fr;
+
 gap:25px;
 }
 
+/* CARD */
+
 .card{
+
 background:rgba(255,255,255,0.05);
+
 padding:25px;
-border-radius:25px;
+
+border-radius:28px;
+
 border:1px solid rgba(255,255,255,0.08);
-backdrop-filter:blur(20px);
+
+backdrop-filter:blur(25px);
+
+box-shadow:
+0 0 25px rgba(255,255,255,0.03);
+}
+
+/* FORM */
+
+.label{
+
+margin-top:15px;
+font-size:14px;
+opacity:0.8;
 }
 
 input,select{
+
 width:100%;
-padding:14px;
-margin-top:14px;
+
+padding:15px;
+
+margin-top:10px;
+
 border:none;
 outline:none;
+
 border-radius:16px;
+
 background:#111827;
+
 color:white;
+
+font-size:15px;
+
+border:1px solid rgba(255,255,255,0.05);
+
+transition:0.3s;
 }
+
+input:focus,
+select:focus{
+
+border:1px solid #38bdf8;
+
+box-shadow:
+0 0 15px rgba(56,189,248,0.25);
+}
+
+/* BUTTON */
 
 .btn{
+
 width:100%;
-padding:15px;
-margin-top:15px;
+
+padding:16px;
+
+margin-top:18px;
+
 border:none;
-border-radius:16px;
-background:linear-gradient(45deg,#38bdf8,#6366f1);
+
+border-radius:18px;
+
+background:linear-gradient(
+45deg,
+#38bdf8,
+#8b5cf6
+);
+
 color:white;
+
 font-weight:700;
+
 cursor:pointer;
+
+transition:0.3s;
+
+font-size:15px;
+
+box-shadow:
+0 0 25px rgba(56,189,248,0.25);
 }
 
-.btn:hover{transform:scale(1.02);}
+.btn:hover{
+
+transform:translateY(-3px);
+
+box-shadow:
+0 0 35px rgba(56,189,248,0.45);
+}
+
+/* OUTPUT */
 
 .output{
+
 background:#0f172a;
-padding:25px;
-border-radius:22px;
-min-height:600px;
-margin-top:15px;
+
+padding:35px;
+
+border-radius:24px;
+
+min-height:700px;
+
+margin-top:18px;
+
 border:1px solid rgba(255,255,255,0.06);
-line-height:1.8;
+
+line-height:2;
+
 overflow:auto;
+
+font-size:16px;
+
+box-shadow:
+inset 0 0 30px rgba(255,255,255,0.02);
+}
+
+.output h1,
+.output h2,
+.output h3{
+
+color:#38bdf8;
+
+margin-top:20px;
+margin-bottom:10px;
+
+line-height:1.5;
+}
+
+.output p{
+
+margin-top:12px;
+color:#e2e8f0;
+}
+
+.output strong{
+color:white;
+}
+
+.output ul{
+padding-left:20px;
+margin-top:10px;
+}
+
+.output li{
+margin-top:8px;
 }
 
 .loader{
+
 display:none;
+
+padding:12px 18px;
+
+background:#111827;
+
+border-radius:14px;
+
+margin-bottom:15px;
+
 color:#38bdf8;
+
 font-weight:600;
-margin-bottom:10px;
+
+width:fit-content;
 }
 
+/* TAGS */
+
+.tags{
+
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+
+margin-top:20px;
+}
+
+.tag{
+
+padding:10px 14px;
+
+border-radius:999px;
+
+background:#111827;
+
+font-size:13px;
+
+border:1px solid rgba(255,255,255,0.05);
+}
+
+/* RESPONSIVE */
+
 @media(max-width:1000px){
-.main{grid-template-columns:1fr;}
-.hero h1{font-size:38px;}
+
+.main{
+grid-template-columns:1fr;
+}
+
+.hero{
+padding:35px;
+}
+
+.hero h1{
+font-size:38px;
+}
+
+.output{
+min-height:500px;
+}
+
 }
 
 </style>
@@ -147,21 +376,65 @@ margin-bottom:10px;
 
 <body>
 
+<!-- NAV -->
+
 <div class="nav">
-<div class="logo">📚 ExamPanic AI Notes</div>
-<button class="nav-btn">PDF Mode</button>
+
+<div class="logo">
+📚 ExamPanic AI
 </div>
 
-<div class="hero">
-<h1>Generate <span>Class Wise AI Notes</span> 🚀</h1>
+<button class="nav-btn">
+🚀 AI Notes Engine
+</button>
+
 </div>
+
+<!-- HERO -->
+
+<div class="hero">
+
+<h1>
+
+Generate <span>Deep ICSE AI Notes</span> Like A Real Textbook 🚀
+
+</h1>
+
+<p>
+
+ExamPanic AI creates smart textbook-style notes with deep concepts,
+examples, revision, memory tricks and exam-focused explanations
+for ICSE students in both Hindi and English.
+
+</p>
+
+<div class="tags">
+
+<div class="tag">📚 ICSE Ready</div>
+<div class="tag">🧠 Deep Concepts</div>
+<div class="tag">🌍 Hindi + English</div>
+<div class="tag">⚡ AI Powered</div>
+
+</div>
+
+</div>
+
+<!-- MAIN -->
 
 <div class="main">
 
+<!-- LEFT -->
+
 <div class="card">
 
+<h2>⚙ Generate Notes</h2>
+
+<div class="label">Class</div>
+
 <select id="cls">
-<option value="">Class</option>
+
+<option value="">Select Class</option>
+
 <option value="1">1</option>
 <option value="2">2</option>
 <option value="3">3</option>
@@ -172,37 +445,56 @@ margin-bottom:10px;
 <option value="8">8</option>
 <option value="9">9</option>
 <option value="10">10</option>
+
 </select>
 
-<input id="subject" placeholder="Subject">
-<input id="chapter" placeholder="Chapter">
+<div class="label">Subject</div>
 
-<!-- 🌐 LANGUAGE ADDED -->
+<input id="subject" placeholder="Example: Biology">
+
+<div class="label">Chapter</div>
+
+<input id="chapter" placeholder="Example: Nutrition">
+
+<div class="label">Language</div>
+
 <select id="lang">
+
 <option value="english">English</option>
 <option value="hindi">Hindi</option>
+
 </select>
 
 <button class="btn" onclick="generateNotes()">
-Generate Notes
+
+🚀 Generate Deep Notes
+
 </button>
 
 <button class="btn" onclick="downloadPDF()">
-Download PDF
+
+📥 Download Professional PDF
+
 </button>
 
 </div>
 
+<!-- RIGHT -->
+
 <div class="card">
 
-<h2>📖 Notes Output</h2>
+<h2>📖 AI Textbook Output</h2>
 
 <div class="loader" id="loader">
-⚡ AI is generating notes...
+
+⚡ ExamPanic AI is generating deep textbook notes...
+
 </div>
 
 <div id="notesBox" class="output">
-Your notes will appear here...
+
+Your AI textbook notes will appear here...
+
 </div>
 
 </div>
@@ -211,87 +503,203 @@ Your notes will appear here...
 
 <script>
 
-const API = "https://student-learning-system-r6bi.onrender.com";
+const API =
+"https://student-learning-system-r6bi.onrender.com";
 
 let lastNotes = "";
 
 /* GENERATE NOTES */
+
 async function generateNotes(){
 
-let cls = document.getElementById("cls").value;
-let subject = document.getElementById("subject").value;
-let chapter = document.getElementById("chapter").value;
-let lang = document.getElementById("lang").value;
+let cls =
+document.getElementById("cls").value;
+
+let subject =
+document.getElementById("subject").value;
+
+let chapter =
+document.getElementById("chapter").value;
+
+let lang =
+document.getElementById("lang").value;
 
 if(!cls || !subject || !chapter){
-alert("Fill all fields");
+
+alert("Please fill all fields");
 return;
+
 }
 
-document.getElementById("loader").style.display = "block";
+document.getElementById("loader").style.display =
+"block";
+
+document.getElementById("notesBox").innerHTML =
+"";
 
 try{
 
 let res = await fetch(API + "/generate-notes",{
+
 method:"POST",
-headers:{"Content-Type":"application/json"},
+
+headers:{
+"Content-Type":"application/json"
+},
+
 body:JSON.stringify({
+
 student_name:"demo",
+
 student_class:cls,
+
 subject:subject,
+
 chapter:chapter,
-language:lang   // 🔥 NEW
+
+language:lang
+
 })
+
 });
 
 let data = await res.json();
 
 if(data.status !== "success"){
-document.getElementById("notesBox").innerHTML = "❌ Backend Error";
+
+document.getElementById("notesBox").innerHTML =
+"❌ Backend Error";
+
 return;
+
 }
 
 lastNotes = data.notes || "";
-document.getElementById("notesBox").innerHTML = marked.parse(lastNotes);
+
+document.getElementById("notesBox").innerHTML =
+
+marked.parse(lastNotes);
 
 }
+
 catch(err){
-document.getElementById("notesBox").innerHTML = "❌ Backend Error";
-}
-finally{
-document.getElementById("loader").style.display = "none";
-}
+
+document.getElementById("notesBox").innerHTML =
+
+"❌ Server Error";
+
 }
 
-/* PDF */
+finally{
+
+document.getElementById("loader").style.display =
+"none";
+
+}
+
+}
+
+/* PROFESSIONAL PDF */
+
 function downloadPDF(){
 
 if(!lastNotes){
-alert("No notes to download!");
+
+alert("No notes available!");
 return;
+
 }
 
 const { jsPDF } = window.jspdf;
-let doc = new jsPDF();
 
-let lines = lastNotes.split("\n");
-let y = 12;
+const doc = new jsPDF({
 
-doc.setFontSize(12);
-
-lines.forEach(line => {
-
-if(y > 280){
-doc.addPage();
-y = 12;
-}
-
-doc.text(line, 10, y);
-y += 8;
+orientation:"portrait",
+unit:"mm",
+format:"a4"
 
 });
 
-doc.save("ExamPanic_Notes.pdf");
+const margin = 15;
+
+const pageWidth =
+doc.internal.pageSize.getWidth();
+
+const maxWidth =
+pageWidth - margin * 2;
+
+let y = 20;
+
+/* TITLE */
+
+doc.setFont("helvetica","bold");
+
+doc.setFontSize(22);
+
+doc.setTextColor(56,189,248);
+
+doc.text("ExamPanic AI Notes", margin, y);
+
+y += 12;
+
+/* LINE */
+
+doc.setDrawColor(56,189,248);
+
+doc.line(margin,y,pageWidth-margin,y);
+
+y += 10;
+
+/* CONTENT */
+
+doc.setFont("times","normal");
+
+doc.setFontSize(13);
+
+doc.setTextColor(20,20,20);
+
+let cleanText = lastNotes
+
+.replace(/[#*`>-]/g,"")
+.replace(/📘|📌|📖|⭐|🧠|🔥|❓|📝|🚀/g,"");
+
+let splitText =
+doc.splitTextToSize(cleanText,maxWidth);
+
+splitText.forEach(line => {
+
+if(y > 280){
+
+doc.addPage();
+
+y = 20;
+
+}
+
+doc.text(line, margin, y);
+
+y += 7;
+
+});
+
+/* FOOTER */
+
+doc.setFontSize(10);
+
+doc.setTextColor(120);
+
+doc.text(
+
+"Generated by ExamPanic AI 🚀",
+
+margin,
+
+290
+
+);
+
+doc.save("ExamPanic_AI_Notes.pdf");
+
 }
 
 </script>
